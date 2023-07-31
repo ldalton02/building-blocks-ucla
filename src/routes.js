@@ -3,11 +3,9 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 //
-import BlogPage from './pages/BlogPage';
 import Page404 from './pages/Page404';
 import HomePage from './pages/HomePage';
-import LandingPage from './pages/LandingPage';
-
+import AboutPage from './pages/AboutPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -18,7 +16,7 @@ export default function Router() {
       children: [
         { path: '*', element: <Navigate to="/404" /> },
         { path: 'home', element: <HomePage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'about', element: <AboutPage /> },
       ],
     },
     {

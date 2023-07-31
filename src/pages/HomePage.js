@@ -7,12 +7,25 @@ import { Link as RouterLink, NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Typography, Container, Box, Tooltip, Card, CardContent, Link, IconButton, Button } from '@mui/material';
 
+/* TODO
+* fix drawer ()
+* describe what we do? (what do we do)
+* finish socials linking, create something to link to it (maybe a calendar?)
+*/
 
-import { motion, useMotionValue, useScroll, useVelocity, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  MotionValue
+} from "framer-motion";
+
 import { wrap } from '@motionone/utils';
 // Icons
+
+
 import Iconify from '../components/iconify';
-// ----------------------------------------------------------------------
 
 const bull = (
   <Box
@@ -23,30 +36,76 @@ const bull = (
   </Box>
 );
 
+
+const ImageBox = (src) => (
+  <Box
+    component="img"
+    sx={{
+      alignItems: 'center',
+      maxWidth: {
+        sm: '100%',
+        lg: '80%'
+      },
+      marginTop: 10
+    }}
+    alt="The house from the offer."
+    src={src}
+  />
+)
+
+
+const logos = [
+  '/assets/companylogos/google.png',
+  '/assets/companylogos/databricks.png',
+  '/assets/companylogos/amazon.png',
+  '/assets/companylogos/imc.png',
+  '/assets/companylogos/accenture.png',
+  '/assets/companylogos/mckinsey.png'
+]
+
 const StyledContent = styled('div')(({ theme }) => ({
   margin: 'auto',
   marginTop: '20%',
   display: 'flex',
   justifyContent: 'left',
   flexDirection: 'column',
+  alignItems: 'center',
   padding: 0,
+  width: '100%',
   // messy height formatting - TODO FIX
   [theme.breakpoints.down('sm')]: {
-    minHeight: '80vh',
   },
-  minHeight: '70vh',
+  minHeight: '50vh',
   [theme.breakpoints.up('lg')]: {
     marginTop: '10%',
-    minHeight: '69vh',
+  },
+}));
+
+
+
+const AboutMeSection = styled('div')(({ theme }) => ({
+  margin: 'auto',
+  marginTop: '30%',
+  display: 'flex',
+  justifyContent: 'left',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100%',
+  // messy height formatting - TODO FIX
+  minHeight: '50vh',
+  [theme.breakpoints.up('lg')]: {
+    marginTop: '20%',
   },
 }));
 
 const LandingParagraph = styled('div')(({ theme }) => ({
   marginTop: theme.spacing(2),
-  maxWidth: '80%',
+  textAlign: 'center',
   fontSize: 20,
+  width: '100%',
   [theme.breakpoints.up('lg')]: {
-    maxWidth: '40%',
+    paddingRight: '10%',
+    paddingLeft: '10%',
   },
 }));
 
@@ -61,7 +120,7 @@ const StyledDownArrowContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: '10vh'
+  marginTop: '20Vh'
 }));
 
 
@@ -86,10 +145,11 @@ const SectonTitleContainer = styled('div')(({ theme }) => ({
 const AboutMeContainer = styled('div')(({ theme }) => ({
   width: '100%',
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: '1fr 1fr 1fr',
   gridGap: '1em',
   color: 'black',
-  [theme.breakpoints.down('sm')]: {
+  marginTop: '2vh',
+  [theme.breakpoints.down('md')]: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -97,12 +157,14 @@ const AboutMeContainer = styled('div')(({ theme }) => ({
   }
 }));
 
-const StyledSkillsContainer = styled('div')(({ theme }) => ({
+
+const WhatWeOfferContainer = styled('div')(({ theme }) => ({
   width: '100%',
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: '1fr 1fr 1fr',
   gridGap: '1em',
   color: 'black',
+  // TODO: fix small screen styling 
   [theme.breakpoints.down('sm')]: {
     display: 'flex',
     alignItems: 'center',
@@ -111,8 +173,11 @@ const StyledSkillsContainer = styled('div')(({ theme }) => ({
   }
 }));
 
-const TextContainer = styled('div')(({ theme }) => ({
+const WhatWeDoContainer = styled('div')(({ theme }) => ({
   width: '100%',
+  minHeight: '40%',
+  textAlign: 'left',
+  paddingRight: '10%',
   marginTop: theme.spacing(1),
   color: 'black',
 }));
@@ -136,6 +201,23 @@ const CustomLink = styled('a')(({ theme }) => ({
   }
 }));
 
+const LogosContainer = styled('div')(({ theme }) => ({
+
+  [theme.breakpoints.up('lg')]: {
+    columnCount: 3,
+    columnGap: 2,
+    lineHeight: 0,
+  },
+
+  [theme.breakpoints.down('md')]: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '50%',
+  }
+
+}));
+
 // ----------------------------------------------------------------------
 
 const SectionTitle = (text) => (
@@ -154,10 +236,10 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title> Luke Dalton </title>
+        <title> Building Blocks UCLA </title>
       </Helmet>
       <Container>
-        <StyledContent sx={{ textAlign: 'left', alignItems: 'left' }}>
+        <StyledContent sx={{ textAlign: 'center', alignItems: 'center', marginBottom: '10%' }}>
           <motion.div
             initial={{ y: 0, opacity: 0 }}
             whileInView={{ y: -40, opacity: 1 }}
@@ -166,39 +248,13 @@ export default function HomePage() {
               duration: 1.5,
             }}
           >
-            <StyledEmojiContainer>
-              <Typography variant="h1" paragraph>
-                Hey There!
-              </Typography>
-              <motion.div
-                animate={{
-                  rotate: [0, 30, -30, 30, -30, 0],
-                }}
-                transition={{
-                  duration: 2,
-                  ease: "easeInOut",
-                  times: [0, 0.3, 0.5, 0.7, 0.9, 1],
-                  repeat: Infinity,
-                  repeatDelay: 1
-                }}
-                style={{ height: '100%', marginLeft: 20 }}>
-                <Typography variant='h1' paragraph>
-                  👋
-                </Typography>
-              </motion.div>
-            </StyledEmojiContainer>
 
             <Typography variant="h1" paragraph>
-              My name is Luke Dalton.
+              Dream Big UCLA
             </Typography>
-
-            <Typography variant="h3" sx={{ color: 'text.secondary' }}>
-              I'm a third year Computer Science student at UCLA.
-            </Typography>
-
             <LandingParagraph>
               <Typography variant="p" sx={{ color: 'text.secondary' }} >
-                My main areas of experience so far are Web Development with React and analysis of large-scale systems using SQL to query data and C++ to log data.
+                Whether it be interview preparation, resume review, or just simply providing information about your dream industry, we want to help you achieve your dreams.
               </Typography>
             </LandingParagraph>
           </motion.div>
@@ -226,13 +282,121 @@ export default function HomePage() {
               <Iconify
                 width={50}
                 icon="eva:chevron-down-fill"
-
               />
             </motion.div>
           </StyledDownArrowContainer>
         </StyledContent>
 
-        <StyledContent>
+        <AboutMeSection>
+          <motion.div
+            initial={{ y: 0, opacity: 0 }}
+            whileInView={{ y: -40, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 1.5,
+              delay: '0.2'
+            }}
+            style={{ width: '100%' }}
+
+          >
+            {SectionTitle('What We Do')}
+          </motion.div>
+
+          <AboutMeContainer>
+
+            <motion.div
+              initial={{ y: 0, opacity: 0 }}
+              whileInView={{ y: -40, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 1.5,
+              }}
+              style={{ minHeight: { lg: '40vh' }, width: '100%' }}
+            >
+
+              <WhatWeDoContainer>
+                <Typography
+                  variant='h4'>
+                  Interview Preparations
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  With members placed in top companies, we know how difficult the interview process can be.
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  Having gone through the stressful recruiting processes ourselves, we can help you figure out where to start and what exactly to do to get the internship of your dreams.
+                </Typography>
+              </WhatWeDoContainer>
+            </motion.div>
+            <motion.div
+              initial={{ y: 0, opacity: 0 }}
+              whileInView={{ y: -40, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 1.5,
+                delay: '0.2'
+              }}
+              style={{ minHeight: { lg: '40vh' }, width: '100%' }}
+
+            >
+              <WhatWeDoContainer>
+                <Typography
+                  variant='h4'>
+                  Resume Review
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  A stellar resume is one of the most important things to get you an interview at a great company.
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  At our resume review sessions, one of our members with internship application experience will help you review your resume.
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  We have members who can help tailor your resume to many types of roles, including software engineering, consulting, or investment banking.
+                </Typography>
+              </WhatWeDoContainer>
+            </motion.div>
+            <motion.div
+              initial={{ y: 0, opacity: 0 }}
+              whileInView={{ y: -40, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 1.5,
+                delay: '0.4'
+              }}
+              style={{ minHeight: { lg: '40vh' }, width: '100%' }}
+            >
+              <WhatWeDoContainer>
+                <Typography
+                  variant='h4'>
+                  Club Recruitment
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  Our board members know how difficult it is to get into some of the amazing clubs on campus.
+                </Typography>
+                <Typography
+                  variant='body1'
+                  gutterBottom>
+                  We want to help you choose which club is right for you and help you get into the club you actually want.
+                </Typography>
+              </WhatWeDoContainer>
+            </motion.div>
+          </AboutMeContainer>
+        </AboutMeSection>
+
+
+        <StyledContent style={{ minHeight: 0 }} >
+
           <motion.div
             initial={{ y: 0, opacity: 0 }}
             whileInView={{ y: -40, opacity: 1 }}
@@ -241,66 +405,20 @@ export default function HomePage() {
               duration: 1.5,
             }}
           >
-            {SectionTitle('About Me')}
-            <AboutMeContainer>
-              <TextContainer>
-                <Typography variant="p" sx={{ color: 'text.secondary', fontSize: 20 }} paragraph>
-                  I'm currently a third-year student at UCLA majoring in Computer Science and am loving every moment of it.
-                  After interning at Google last summer, I became more interested in the startup scene of Silicon Valley. I have decided to minor in entrepreneurship to learn more about starting my own company in the future.
-                </Typography>
-                <Typography variant="p" sx={{ color: 'text.secondary', fontSize: 20 }} paragraph>
-                  I'm excited to return to Google for the summer of 2023 as a SWE intern!
-                  Currently, I'm open to work opportunities in the fall quarter of 2023 as I plan to take a quarter off to get more work experienece.
-                </Typography>
-                <Typography variant="p" sx={{ color: 'text.secondary', fontSize: 20 }} >
-                  I've also just started a new section of this site to review what I'm currently reading, available <RouterLink to='/blog'> here.</RouterLink>
-                </Typography>
-              </TextContainer>
-              <StyledImage>
-                <Box
-                  component="img"
-                  sx={{
-                    borderRadius: '10%',
-                    alignItems: 'center',
-                    width: {
-                      xs: '80%',
-                      md: '70%',
-                      lg: '60%',
-                    },
-                    marginTop: {
-                      xs: 2,
-                      lg: 0,
-                    },
-                    boxShadow: `6px 6px black`
-                  }}
-                  alt="The house from the offer."
-                  src="/assets/images/portrait/desk_selfie.jpg"
-                />
-                <TextContainer sx={{ textAlign: "center", fontSize: 40 }}>
-                  <motion.div
-                    whileHover={{ scale: 1.2 }}
-                    animate={{
-                      rotate: [0, 10, -10, 10, -10],
-                    }}
-                    transition={{
-                      scale: {
-                        duration: 0.2,
-                      },
-                      duration: 1,
-                      ease: "easeInOut",
-                      times: [0, 0.3, 0.5, 0.7, 1],
-                      repeat: Infinity,
-                      repeatDelay: 3
-                    }}>
-                    <Tooltip title='Me hard at work in the Google Bay View office' placement='bottom' sx={{ color: 'black' }} arrow>
-                      <Typography variant="p">
-                        🔎
-                      </Typography>
-                    </Tooltip>
-                  </motion.div>
-                </TextContainer>
-              </StyledImage>
-            </AboutMeContainer>
+            {SectionTitle('Where our Members Are')}
+            <Typography variant='body1' style={{ marginTop: 5 }}>
+              We have board members of our club working at many prestigious companies:
+            </Typography>
+
+            <StyledContent
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', }}
+            >
+              <LogosContainer>
+                {logos.map(each => (
+                  ImageBox(each)))
+                }
+              </LogosContainer>
+            </StyledContent>
           </motion.div>
         </StyledContent>
 
@@ -312,152 +430,27 @@ export default function HomePage() {
             transition={{
               duration: 1.5,
             }}
+            style={{ width: '100%' }}
           >
-            {SectionTitle('Experience + Work')}
-            <Typography variant='p' sx={{ fontSize: 20, marginTop: 3 }} paragraph>
-              Currently, I've only worked at a few places:
-            </Typography>
-            <Card sx={{ /* custom sx here */ }}>
-              <CardContent>
-                <Typography variant="h4" component="div">
-                  Google STEP Intern
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  June 2022 - September 2022
-                </Typography>
-                <Typography variant="body2">
-                  Improved advertisement suggestion to users by creating an internal analysis tool that used across 3 advertisement teams.
-                  <br />  Retrieved terabytes of data and calculated distributions with user inputs using advanced SQL queries.
-                  <br />  Moved logging data throughout a machine learning process using C++.
-                </Typography>
-              </CardContent>
-
-              {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-            </Card>
-            <Card sx={{ marginTop: 2 }}>
-              <CardContent>
-                <Typography variant="h4" component="div">
-                  Web Developer for UCLA Social Sciences Computing
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  May 2021 - May 2022
-                </Typography>
-                <Typography variant="body2">
-                  Updated and maintained a UCLA Social Sciences website to make hate crimes occurrences available to the public.
-                  <br />
-                  Worked with PostgreSQL, NodeJS, and ReactJS to create an API and display data on an interactive map.
-                </Typography>
-              </CardContent>
-              {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-            </Card>
-            <Card sx={{ marginTop: 2 }}>
-              <CardContent>
-                <Typography variant="h4" component="div">
-                  Learning Lab Developer for ACM Teach LA (ACM @ UCLA)
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  May 2021 - Mar 2022
-                </Typography>
-                <Typography variant="body2">
-                  Alongside a small team, worked with ReactJS to create a small web app designed to educate aspiring child programmers on Python.
-                </Typography>
-              </CardContent>
-              {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-            </Card>
-            <Typography variant='p' sx={{ fontSize: 20, marginTop: 3 }} paragraph>
-              Outside of the work listed above, I have gotten comfortable with multiple other tools and languages through clubs, other work experiences, and course work.
-            </Typography>
-            <AboutMeContainer>
-              <Card sx={{ marginTop: 2, width: '100%' }}>
-                <CardContent>
-                  <Typography variant="h4" component="div">
-                    Languages
-                  </Typography>
-                  <Typography variant='p' sx={{}} paragraph >
-                    <br /> {bull} JavaScript (ES6)
-                    <br /> {bull} C/C++
-                    <br /> {bull} TypeScript
-                    <br /> {bull} SQL
-                    <br /> {bull} Python
-                  </Typography>
-                </CardContent>
-                {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-              </Card>
-              <Card sx={{ marginTop: 2 }}>
-                <CardContent>
-                  <Typography variant="h4" component="div">
-                    Technologies
-                  </Typography>
-                  <Typography variant='p' sx={{}} paragraph >
-                    <br /> {bull} ReactJS
-                    <br /> {bull} Git (along with other version control systems)
-                    <br /> {bull} Jekyll
-                    <br /> {bull} MongoDB
-                    <br /> {bull} CSS/Sass
-                  </Typography>
-                </CardContent>
-                {/* <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions> */}
-              </Card>
-            </AboutMeContainer>
-          </motion.div>
-        </StyledContent>
-
-        <StyledContent>
-          <motion.div
-            initial={{ y: 0, opacity: 0 }}
-            whileInView={{ y: -40, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 1.5,
-            }}
-          >
-            {SectionTitle('Contact Me')}
+            {SectionTitle('Get Involved')}
             <Typography variant='p' sx={{ fontSize: 20 }} paragraph>
-              Want to get into contact with me? Email me at <Link underline='hover' href='mailto:lukedalton221@gmail.com'>lukedalton221@gmail.com</Link>
+              Want to get involved with us?
             </Typography>
-            <Typography variant='p' sx={{ fontSize: 20 }} paragraph>
-              I'm always open to new work opportunities and ideas. Maybe we could build something great together!
-            </Typography>
+
             <Typography variant='p' sx={{ fontSize: 20 }}>
-              My socials are available at the following sites:
+              Most of our events will be posted on our instagram. Check it out below:
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-              <Button sx={{ marginTop: 2, marginRight: 2 }} variant='outlined' startIcon={<Iconify icon="eva:github-outline" />}>
-                Github
-              </Button>
-              <Button sx={{ marginTop: 2, marginRight: 2 }} variant='outlined' startIcon={<Iconify icon="eva:linkedin-outline" />}>
-                Linkedin
-              </Button>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '5vh' }}>
+              <Link href="https://instagram.com/buildingblocksucla">
+                <Button sx={{ marginTop: 2, marginRight: 2 }} variant='outlined' startIcon={<Iconify icon="ri:instagram-line" />}>
+                  Instagram
+                </Button>
+              </Link>
             </Box>
-            <Typography sx={{ fontSize: 20, textAlign: 'center', marginTop: {xs: '15vh', lg: '20vh'}}}>
-              Created with <motion.p
-                animate={{
-                  scale: [1, 1.4, 1, 1.4, 1]
-                }}
-                transition={{
-                  duration: 2,
-                  ease: "easeInOut",
-                  times: [0, 0.2, 0.4, 0.6, 0.8, 1],
-                  repeat: Infinity,
-                  repeatDelay: 1
-                }}
-              >
-                ❤️
-              </motion.p>
-              by Luke Dalton
+            <Typography variant='p' sx={{ fontSize: 20 }} paragraph>
+              You can also email us at <Link underline='hover' href='mailto:buildingblocksucla@gmail.com'>buildingblocksucla@gmail.com</Link>
             </Typography>
           </motion.div>
-
         </StyledContent>
       </Container>
     </>

@@ -2,9 +2,12 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Link, Typography } from '@mui/material';
+import { Link as RouterLink, NavLink } from 'react-router-dom';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
+
+
 import Iconify from '../../../components/iconify';
 //
 import Searchbar from './Searchbar';
@@ -45,16 +48,16 @@ export default function Header({ onOpenNav }) {
   return (
     <StyledRoot>
       <StyledToolbar>
-        <IconButton
-          onClick={onOpenNav}
-          sx={{
-            mr: 1,
-            color: 'text.primary',
-          }}
-        >
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-
+        <RouterLink to='/home' style={{ textDecoration: 'none', color: 'text.primary' }}>
+          <Typography
+            variant='h3'
+            sx={{
+              color: 'black',
+            }}
+          >
+            Building Blocks
+          </Typography>
+        </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -65,35 +68,19 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
+          <Link style={{ textDecoration: 'none' }}>
+            <RouterLink to='/about' style={{ textDecoration: 'none', color: 'text.primary' }}> About Us</RouterLink>
+          </Link>
           <IconButton
             sx={{
               mr: 1,
               color: 'text.primary',
-              marginRight: 0,
             }}
           >
-            <Link sx={{ color: 'text.primary' }} href='https://github.com/ldalton02' >
-              <Iconify icon="eva:github-outline" />
+            <Link sx={{ color: 'text.primary' }} href='https://instagram.com/buildingblocksucla' >
+              <Iconify icon="ri:instagram-line" />
             </Link>
           </IconButton>
-          <IconButton
-            sx={{
-              mr: 1,
-              color: 'text.primary',
-              marginRight: 40,
-            }}
-          >
-            <Link sx={{ color: 'text.primary' }} href='https://www.linkedin.com/in/luke-dalton-195996209/' >
-              <Iconify icon="eva:linkedin-outline" />
-            </Link>
-          </IconButton>
-          <Typography
-            sx={{
-              color: 'black',
-            }}
-          >
-            Luke Dalton
-          </Typography>
         </Stack>
       </StyledToolbar>
     </StyledRoot>
